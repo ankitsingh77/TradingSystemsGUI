@@ -22,6 +22,19 @@ namespace TradingSystemsGUI
         public MainForm(User user) : this()
         {
             this.user = user;
+            lblUserName.Text = user.FullName;
+            LoadStocks();
+        }
+
+        private void LoadStocks()
+        {
+            var client = new TradingServiceClient();
+            var stocks = client.GetAllStocks();
+            foreach (var stock in stocks)
+            {
+                var stockTickerCtrl = new StockTickerCtrl(stock.StockId, stock.StockSymbol, stock.Price, "USD");
+                flPanelStockTickers.Controls.Add(stockTickerCtrl);
+            }
         }
 
         private void AddTickers(Guid userId)

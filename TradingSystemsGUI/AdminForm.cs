@@ -48,7 +48,20 @@ namespace TradingSystemsGUI
 
         private void BtnCreateStock_Click(object sender, System.EventArgs e)
         {
-            throw new System.NotImplementedException();
+            var client = new TradingServiceClient();
+            double price = 0;
+            double.TryParse(txtPrice.Text, out price);
+            int quantity = 0;
+            int.TryParse(txtVolume.Text, out quantity);
+            var result = client.CreateStock(txtSotckName.Text, txtSymbol.Text, price, quantity);
+            if(result != Guid.Empty)
+            {
+                MessageBox.Show("Stock created");
+            }
+            else
+            {
+                MessageBox.Show("There is some error while creating the stock. Please check networ connections");
+            }
         }
     }
 }

@@ -72,8 +72,24 @@ namespace TradingSystemsGUI
                 return;
             }
 
-            TradingServiceClient client = new TradingServiceClient();
-            var user = client.ValidateUser(txtUserName.Text, txtPassword.Text);
+            TradingSystemServer.User user = null;
+
+            try
+            {
+                TradingServiceClient client = new TradingServiceClient();
+                user = client.ValidateUser(txtUserName.Text, txtPassword.Text);
+            }
+            catch (System.ServiceModel.EndpointNotFoundException ex)
+            {
+                MessageBox.Show("Unable to connect to the server");
+                return;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Something went wrong. Please try later");
+                return;
+            }
+
             if(user == null)
             {
                 MessageBox.Show("Username or password is incorrect");
@@ -92,6 +108,7 @@ namespace TradingSystemsGUI
                     adminForm.ShowDialog();
                 }
             }
+
         }
 
     }
