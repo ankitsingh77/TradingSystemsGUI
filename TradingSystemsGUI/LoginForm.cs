@@ -41,7 +41,7 @@ namespace TradingSystemsGUI
                 UserName = txtUserNameSignUp.Text,
                 EmailId = txtEmailId.Text,
                 FullName = txtFullName.Text,
-                Type = cmbUserType.SelectedIndex + 1,
+                Type = cmbUserType.SelectedIndex,
                 Password = txtPwdSignUp.Text
             });
 
@@ -94,10 +94,11 @@ namespace TradingSystemsGUI
             {
                 MessageBox.Show("Username or password is incorrect");
             }
-            else if(user.Type == 2)
+            else if(user.Type == 1)
             {
                 using (var mainForm = new MainForm(user))
                 {
+                    UserContext.SetUserContext(user);
                     mainForm.ShowDialog();
                 }
             }
@@ -105,6 +106,7 @@ namespace TradingSystemsGUI
             {
                 using(var adminForm = new AdminForm(user))
                 {
+                    UserContext.SetUserContext(user);
                     adminForm.ShowDialog();
                 }
             }

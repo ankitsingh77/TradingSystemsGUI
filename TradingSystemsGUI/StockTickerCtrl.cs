@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TradingSystemServer;
 
 namespace TradingSystemsGUI
 {
@@ -17,6 +18,7 @@ namespace TradingSystemsGUI
         private double stockPrice;
         private string currencyCode;
         private Guid stockId;
+        public event Action OnRefresh;
 
         public StockTickerCtrl()
         {
@@ -37,17 +39,25 @@ namespace TradingSystemsGUI
 
         private void BtnSell_Click(object sender, System.EventArgs e)
         {
-            using(var buySellForm = new BuySellStockForm(true, StockSymbol, StockPrice))
+            using(var buySellForm = new BuySellStockForm(true, StockSymbol, StockPrice, stockId))
             {
                 buySellForm.ShowDialog();
+                if (OnRefresh != null)
+                {
+                    OnRefresh();
+                }
             }
         }
 
         private void BtnBuy_Click(object sender, System.EventArgs e)
         {
-            using (var buySellForm = new BuySellStockForm(false, StockSymbol, StockPrice))
+            using (var buySellForm = new BuySellStockForm(false, StockSymbol, StockPrice, stockId))
             {
                 buySellForm.ShowDialog();
+                if (OnRefresh != null)
+                {
+                    OnRefresh();
+                }
             }
         }
     }

@@ -16,6 +16,7 @@ namespace TradingSystemsGUI
         private string stockSymbol;
         private double price;
         private bool isLimit;
+        private Guid stockId;
 
 
         public BuySellStockForm()
@@ -23,13 +24,15 @@ namespace TradingSystemsGUI
             InitializeComponent();
         }
 
-        public BuySellStockForm(bool isSell, string stockSymbol, double price) : this()
+        public BuySellStockForm(bool isSell, string stockSymbol, double price, Guid stockId) : this()
         {
             this.IsSell = isSell;
             this.StockSymbol = stockSymbol;
             this.Price = price;
             IsLimit = false;
+            this.stockId = stockId;
         }
+
 
         public bool IsSell 
         {
@@ -119,9 +122,53 @@ namespace TradingSystemsGUI
 
         private void BtnBuySell_Click(object sender, System.EventArgs e)
         {
-            if(!isSell)
+            var user = UserContext.GetUserContext();
+            var client = new TradingServiceClient();
+            var portfolio = client.GetPortFolio(user.Id);
+            var stock = client.GetAllStocks().Where(o => o.StockId == stockId).FirstOrDefault();
+            var portfolioStock = portfolio.Stocks.Where(o => o.StockId == stockId).FirstOrDefault();
+            if (!isSell)
             {
+                if (stock != null)
+                {
+                    double quantity = 0;
+                    if(double.TryParse(txtQuantity.Text, out quantity))
+                    {
+                        if(portfolio.Balance >= (quantity * stock.Price))
+                        {
+                            if(client.PurchaseStock(this.stockId, user.Id, (int)quantity))
+                            {
+                                MessageBox.Show("Buy transaction succesfull");
+                                this.Close();
+                                return;
+                            }
+                        }
+                    }
 
+                }
+
+                MessageBox.Show("Unable to complete transaction");
+            }
+            else
+            {
+                if(portfolioStock != null)
+                {
+                    double quantity = 0;
+                    if (double.TryParse(txtQuantity.Text, out quantity))
+                    {
+                        if (portfolioStock.Quantity >= quantity)
+                        {
+                            if (client.SellStock(portfolioStock.StockId, user.Id, (int)quantity))
+                            {
+                                MessageBox.Show("Sell transaction succesfull");
+                                this.Close();
+                                return;
+                            }
+                        }
+                    }
+                }
+
+                MessageBox.Show("Unable to complete transaction");
             }
         }
 

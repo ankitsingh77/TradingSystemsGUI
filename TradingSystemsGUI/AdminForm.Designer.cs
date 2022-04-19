@@ -256,6 +256,7 @@ namespace TradingSystemsGUI
             this.pnlChangeSchedule.Visible = false;
             this.Name = "AdminForm";
             this.Text = "AdminForm";
+            this.FormClosing += AdminForm_FormClosing;
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.pnlChangeSchedule.ResumeLayout(false);
@@ -265,6 +266,11 @@ namespace TradingSystemsGUI
             this.ResumeLayout(false);
             this.PerformLayout();
 
+        }
+
+        private void AdminForm_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e)
+        {
+            UserContext.ClearUserContext();
         }
 
         #endregion

@@ -56,20 +56,19 @@ namespace TradingSystemsGUI
             this.txtQuantity.TabIndex = 1;
             // 
             // txtPrice
-
             // 
+            this.txtPrice.Enabled = false;
             this.txtPrice.Location = new System.Drawing.Point(128, 134);
             this.txtPrice.Name = "txtPrice";
             this.txtPrice.Size = new System.Drawing.Size(111, 26);
             this.txtPrice.TabIndex = 3;
-            this.txtPrice.TextChanged += TxtPrice_TextChanged;
             // 
             // lblPrice
             // 
             this.lblPrice.AutoSize = true;
             this.lblPrice.Location = new System.Drawing.Point(58, 137);
             this.lblPrice.Name = "lblPrice";
-            this.lblPrice.Size = new System.Drawing.Size(66, 30);
+            this.lblPrice.Size = new System.Drawing.Size(44, 20);
             this.lblPrice.TabIndex = 2;
             this.lblPrice.Text = "Price";
             // 
@@ -83,11 +82,13 @@ namespace TradingSystemsGUI
             this.rdoMarket.TabStop = true;
             this.rdoMarket.Text = "Market";
             this.rdoMarket.UseVisualStyleBackColor = true;
-            this.rdoMarket.CheckedChanged += RdoMarket_CheckedChanged;
+            this.rdoMarket.Enabled = false;
+            this.rdoMarket.Checked = true;
             // 
             // rdoLimit
             // 
             this.rdoLimit.AutoSize = true;
+            this.rdoLimit.Enabled = false;
             this.rdoLimit.Location = new System.Drawing.Point(62, 238);
             this.rdoLimit.Name = "rdoLimit";
             this.rdoLimit.Size = new System.Drawing.Size(67, 24);
@@ -95,7 +96,6 @@ namespace TradingSystemsGUI
             this.rdoLimit.TabStop = true;
             this.rdoLimit.Text = "Limit";
             this.rdoLimit.UseVisualStyleBackColor = true;
-            this.rdoLimit.CheckedChanged += RdoLimit_CheckedChanged;
             // 
             // btnBuySell
             // 

@@ -93,6 +93,7 @@
     <Compile Include="StockTickerCtrl.Designer.cs">
       <DependentUpon>StockTickerCtrl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserContext.cs" />
     <EmbeddedResource Include="AdminForm.resx">
       <DependentUpon>AdminForm.cs</DependentUpon>
     </EmbeddedResource>

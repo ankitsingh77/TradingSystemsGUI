@@ -24,6 +24,7 @@ namespace TradingSystemsGUI
             this.user = user;
             lblUserName.Text = user.FullName;
             LoadStocks();
+            AddHoldings();
         }
 
         private void LoadStocks()
@@ -33,19 +34,45 @@ namespace TradingSystemsGUI
             foreach (var stock in stocks)
             {
                 var stockTickerCtrl = new StockTickerCtrl(stock.StockId, stock.StockSymbol, stock.Price, "USD");
+                stockTickerCtrl.OnRefresh += Refresh;
                 flPanelStockTickers.Controls.Add(stockTickerCtrl);
             }
         }
 
-        private void AddTickers(Guid userId)
+        private void AddHoldings()
         {
             var client = new TradingServiceClient();
-            var portFolio = client.GetPortFolio(userId);
+            var portFolio = client.GetPortFolio(user.Id);
+            lblBalance.Text = portFolio.Balance.ToString();
+            flPanelStockHoldings.Controls.Clear();
             foreach(var stock in portFolio.Stocks)
             {
-                var holdinCtrl = new StockHoldingCtrl(stock.StockSymbol, stock.Volume, stock.Price);
-                flPanelStockHoldings.Controls.Add(holdinCtrl);
+                if (stock.Quantity != 0)
+                {
+                    var holdinCtrl = new StockHoldingCtrl(stock.StockSymbol, stock.Quantity, stock.Price);
+                    flPanelStockHoldings.Controls.Add(holdinCtrl);
+                }
             }
+        }
+
+        private void btnAddBalance_Click(object sender, EventArgs e)
+        {
+            var client = new TradingServiceClient();
+            double amountToAdd = 0;
+            if (!double.TryParse(txtAddBalance.Text, out amountToAdd))
+            {
+                MessageBox.Show("Invalid amount");
+                return;
+            }
+
+            var balance = client.AddBalance(user.Id, amountToAdd);
+            lblBalance.Text = balance.ToString();
+            txtAddBalance.Text = "0";
+        }
+
+        private void Refresh()
+        {
+            AddHoldings();
         }
     }
 }
